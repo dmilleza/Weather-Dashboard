@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="description"
+      content="Application utilizes weather API to
+    display weather information for cities."
+    />
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="./assets/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Weather Dashboard</h1>
+    </header>
+    <aside>
+      <form>
+        <label>
+          Search for a City:
+          <input type="text" class="citySearch" />
+          <button class="searchButton">Search</button>
+        </label>
+      </form>
+      <div class="savedCities"></div>
+    </aside>
+
+    <main>
+      <div class="cityInfo">
+        <h2 class="cityHeader"></h2>
+      </div>
+      <h3>5-Day Forecast:</h3>
+      <div class="forecastBox"></div>
+    </main>
+  </body>
+</html>
