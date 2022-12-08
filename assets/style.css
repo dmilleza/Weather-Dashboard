@@ -5,12 +5,7 @@
   font-size: 16px;
 }
 
-body {
-  padding: 3em;
-}
-
 header {
-  width: 50em;
   border: 2px solid black;
   padding: 0.7em;
   display: flex;
@@ -21,4 +16,16 @@ header {
 
 h1 {
   font-size: 1.5em;
+  display: inline;
+}
+
+.mainBox {
+  max-width: 60em;
+  margin: 1em auto;
+}
+
+aside {
+  min-height: 20em;
+  border: 2px solid black;
+  
 }
