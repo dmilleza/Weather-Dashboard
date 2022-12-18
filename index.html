@@ -11,27 +11,49 @@
   </head>
   <body>
     <div class="mainBox">
-    <header>
-      <h1>Weather Dashboard</h1>
-    </header>
-    <aside>
-      <form>
-        <label>
-          Search for a City:
-          <input type="text" class="citySearch" />
-          <button class="searchButton">Search</button>
-        </label>
-      </form>
-      <div class="savedCities"></div>
-    </aside>
+      <header>
+        <h1>Weather Dashboard</h1>
+      </header>
 
-    <main>
-      <div class="cityInfo">
-        <h2 class="cityHeader"></h2>
+      <div class="underHeader">
+        <aside>
+          <form>
+            <label>
+              <h2>Search for a City:</h2>
+              <input type="text" class="citySearch" />
+              <button
+                type="button"
+                class="searchBtn btn"
+                onclick="searchButton()"
+              >
+                Search
+              </button>
+            </label>
+          </form>
+          <hr />
+          <div class="savedCities"></div>
+        </aside>
+
+        <main>
+          <div class="cityInfo">
+            <h2 class="cityHeader"></h2>
+            <p class="condition" id="temp"></p>
+            <p class="condition" id="wind"></p>
+            <p class="condition" id="humid"></p>
+          </div>
+          <h3>5-Day Forecast:</h3>
+          <div class="forecastBox">
+            <div class="box" id="box1"></div>
+            <div class="box" id="box2"></div>
+            <div class="box" id="box3"></div>
+            <div class="box" id="box4"></div>
+            <div class="box" id="box5"></div>
+          </div>
+        </main>
       </div>
-      <h3>5-Day Forecast:</h3>
-      <div class="forecastBox"></div>
-    </main>
-  </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="./assets/script.js"></script>
   </body>
 </html>
