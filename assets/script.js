@@ -31,7 +31,7 @@ function searchCity(city) {
 
   // gets geo coordinates of the first result of the searched city
   let geoCoordAPI =
-    "http://api.openweathermap.org/geo/1.0/direct?q=" +
+    "https://api.openweathermap.org/geo/1.0/direct?q=" +
     city +
     "&limit=5&appid=" +
     weatherKey;
