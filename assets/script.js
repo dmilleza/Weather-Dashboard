@@ -3,6 +3,7 @@ const weatherKey = "946cc641177df8ce033943b2ec9699cb";
 let storedCities = [];
 let cityName;
 
+// gets the value in the input box and gets weather data
 function searchButton() {
   const searchedCity = document.querySelector(".citySearch");
   cityName = searchedCity.value.trim();
@@ -18,6 +19,8 @@ function searchButton() {
 function searchCity(city) {
   const mainBox = document.querySelector("main");
   mainBox.setAttribute("style", "visibility: visible");
+
+  // uses moment.JS for the dates needed
   let m = moment();
   let m2 = moment().add(1, "d").format("[(]M[/]D[/]YYYY[)]");
   let m3 = moment().add(2, "d").format("[(]M[/]D[/]YYYY[)]");
@@ -25,6 +28,8 @@ function searchCity(city) {
   let m5 = moment().add(4, "d").format("[(]M[/]D[/]YYYY[)]");
   let m6 = moment().add(5, "d").format("[(]M[/]D[/]YYYY[)]");
   const dateArray = [m2, m3, m4, m5, m6];
+
+  // gets geo coordinates of the first result of the searched city
   let geoCoordAPI =
     "http://api.openweathermap.org/geo/1.0/direct?q=" +
     city +
@@ -33,18 +38,22 @@ function searchCity(city) {
 
   fetch(geoCoordAPI).then((response) => {
     response.json().then((response) => {
-      console.log(response);
       let cityHeader = document.querySelector(".cityHeader");
       let currentDate = moment().format("[(]M[/]D[/]YYYY[)]");
-
       let cityName2 = response[0].name;
+      let cityCountry = response[0].country;
+
+      // stores city name in array for local storage
       if (!storedCities.includes(cityName2)) {
         storedCities.push(cityName2);
         storeCity();
         renderCities();
       }
-      let cityCountry = response[0].country;
+
+      // displays heading for current weather info
       cityHeader.textContent = `${cityName2}, ${cityCountry} ${currentDate}`;
+
+      // geo coordinates to plug in to other APIs to search city
       let cityLat = response[0].lat;
       let cityLon = response[0].lon;
 
@@ -57,14 +66,15 @@ function searchCity(city) {
         weatherKey +
         "&units=imperial";
 
+      // retrieves current weather data
       fetch(currentWeath).then((response) => {
         response.json().then((response) => {
-          console.log(response);
           let currentTemp = response.main.temp;
           let windSpeed = response.wind.speed;
           let humidity = response.main.humidity;
           let mainWeather = response.weather[0].main;
 
+          // displays current weather data in main heading
           let temp = document.getElementById("temp");
           let wind = document.getElementById("wind");
           let humid = document.getElementById("humid");
@@ -74,7 +84,9 @@ function searchCity(city) {
           let headerIcon = document.getElementById("headerIcon");
           headerIcon.classList.add("icon");
 
+          // determines which picture to show for the main weather
           switch (mainWeather) {
+            // for sunny and clear
             case "Clear":
               headerIcon.setAttribute(
                 "src",
@@ -85,6 +97,7 @@ function searchCity(city) {
               headerIcon.setAttribute("src", "./assets/3294617.png");
               break;
             default:
+              // cloud picture for clouds, mist, and haze
               headerIcon.setAttribute(
                 "src",
                 "./assets/weather-icon-cloudy.png"
@@ -92,7 +105,7 @@ function searchCity(city) {
           }
         });
       });
-
+      // API for five day forecast
       let fiveDayAPI =
         "https://api.openweathermap.org/data/2.5/forecast?lat=" +
         cityLat +
@@ -102,6 +115,7 @@ function searchCity(city) {
         weatherKey +
         "&units=imperial";
 
+      // empties the five boxes before displaying new five day data
       let boxes = document.getElementsByClassName("box");
       for (var i = 0; i < boxes.length; i++) {
         boxes[i].innerHTML = "";
@@ -109,7 +123,6 @@ function searchCity(city) {
 
       fetch(fiveDayAPI).then((response) => {
         response.json().then((response) => {
-          console.log(response.list);
           let fiveDayArray = [
             response.list[0],
             response.list[8],
@@ -118,6 +131,7 @@ function searchCity(city) {
             response.list[32],
           ];
 
+          // loops over all five boxes to display appropriate data
           for (var i = 0; i < boxes.length; i++) {
             let boxDate = document.createElement("h3");
             boxDate.textContent = dateArray[i];
@@ -126,6 +140,8 @@ function searchCity(city) {
             let boxIcon = document.createElement("img");
             boxIcon.classList.add("icon");
             let boxWeather = fiveDayArray[i].weather[0].main;
+
+            // same switch statement from earlier, applies correct weather picture
             switch (boxWeather) {
               case "Clear":
                 boxIcon.setAttribute(
@@ -163,16 +179,20 @@ function storeCity() {
   localStorage.setItem("savedCities", JSON.stringify(storedCities));
 }
 
-let savedCitiesBox = document.querySelector(".savedCities");
-
+// displays history of searched cities under search button
 function renderCities() {
+  let savedCitiesBox = document.querySelector(".savedCities");
   let savedCities2 = JSON.parse(localStorage.getItem("savedCities"));
+
+  // if saved cities exist, copy them into main array in order to display them
   if (savedCities2 !== null) {
     storedCities = savedCities2;
   }
-  console.log(storedCities);
+
+  // erases all buttons before displaying new button list
   savedCitiesBox.innerHTML = "";
 
+  // each saved city gets its own button
   storedCities.forEach((element) => {
     var button = document.createElement("button");
     button.textContent = element;
@@ -182,9 +202,11 @@ function renderCities() {
   });
 }
 
-renderCities();
-
+// when a history button is click, display weather data for its city
 function savedBtnClicked(event) {
   let btnText = event.target.textContent;
   searchCity(btnText);
 }
+
+// displays previously searched cities on page load
+renderCities();
