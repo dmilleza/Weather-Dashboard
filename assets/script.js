@@ -10,12 +10,7 @@ function searchButton() {
   // if input is blank, exit function
   if (cityName === "") {
     return;
-  } else if (storedCities.includes(cityName)) {
-    searchCity(cityName);
   } else {
-    storedCities.push(cityName);
-    storeCity();
-    renderCities();
     searchCity(cityName);
   }
 }
@@ -43,10 +38,16 @@ function searchCity(city) {
       let currentDate = moment().format("[(]M[/]D[/]YYYY[)]");
 
       let cityName2 = response[0].name;
+      if (!storedCities.includes(cityName2)) {
+        storedCities.push(cityName2);
+        storeCity();
+        renderCities();
+      }
       let cityCountry = response[0].country;
       cityHeader.textContent = `${cityName2}, ${cityCountry} ${currentDate}`;
       let cityLat = response[0].lat;
       let cityLon = response[0].lon;
+
       let currentWeath =
         "https://api.openweathermap.org/data/2.5/weather?lat=" +
         cityLat +
@@ -62,6 +63,7 @@ function searchCity(city) {
           let currentTemp = response.main.temp;
           let windSpeed = response.wind.speed;
           let humidity = response.main.humidity;
+          let mainWeather = response.weather[0].main;
 
           let temp = document.getElementById("temp");
           let wind = document.getElementById("wind");
@@ -69,6 +71,25 @@ function searchCity(city) {
           temp.textContent = `Temp: ${currentTemp} F`;
           wind.textContent = `Wind: ${windSpeed} MPH`;
           humid.textContent = `Humidity: ${humidity}%`;
+          let headerIcon = document.getElementById("headerIcon");
+          headerIcon.classList.add("icon");
+
+          switch (mainWeather) {
+            case "Clear":
+              headerIcon.setAttribute(
+                "src",
+                "./assets/sunny-weather-symbols-clip-art-free-vector-in-open-weather-symbols-for-sunny-11562989637qbgdysmpds.png"
+              );
+              break;
+            case "Rain":
+              headerIcon.setAttribute("src", "./assets/3294617.png");
+              break;
+            default:
+              headerIcon.setAttribute(
+                "src",
+                "./assets/weather-icon-cloudy.png"
+              );
+          }
         });
       });
 
@@ -101,6 +122,24 @@ function searchCity(city) {
             let boxDate = document.createElement("h3");
             boxDate.textContent = dateArray[i];
             boxes[i].append(boxDate);
+
+            let boxIcon = document.createElement("img");
+            boxIcon.classList.add("icon");
+            let boxWeather = fiveDayArray[i].weather[0].main;
+            switch (boxWeather) {
+              case "Clear":
+                boxIcon.setAttribute(
+                  "src",
+                  "./assets/sunny-weather-symbols-clip-art-free-vector-in-open-weather-symbols-for-sunny-11562989637qbgdysmpds.png"
+                );
+                break;
+              case "Rain":
+                boxIcon.setAttribute("src", "./assets/3294617.png");
+                break;
+              default:
+                boxIcon.setAttribute("src", "./assets/weather-icon-cloudy.png");
+            }
+            boxes[i].append(boxIcon);
             let boxTemp = document.createElement("p");
             boxTemp.classList.add("condition");
             boxTemp.textContent = `Temp: ${fiveDayArray[i].main.temp} F`;

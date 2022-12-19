@@ -76,7 +76,7 @@ main {
 
 .underHeader {
   display: flex;
-  min-height: 30em;
+  min-height: 20em;
   margin-right: 0.7em;
   gap: 0.8em;
 }
@@ -103,4 +103,16 @@ hr {
   width: 8.8em;
   height: 11em;
   padding: 10px;
+}
+
+.savedCities {
+  overflow: scroll;
+  max-height: 15em;
+}
+.icon {
+  max-width: 1.5em;
+}
+
+.cityHeader {
+  display: inline;
 }
